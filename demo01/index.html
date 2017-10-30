@@ -1,0 +1,66 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+	<p></p>
+
+
+</body>
+</html>
+<script type="text/javascript">
+//let声明作用域块内的变量
+
+var a = [];
+for(var i=0;i<10;i++){
+	a[i] = function(){
+		console.log(i);
+	}
+}
+a[6](); //10
+
+for(let i=0;i<10;i++){
+	a[i] = function(){
+		console.log(i)
+	}
+}
+a[7](); //7
+
+for(let i=0;i<3;i++){
+	let i='123';
+	console.log(i); //123
+}
+
+console.log(foo); //undefined
+var foo = '7878';
+
+//不可以在let声明前使用变量会报错
+//console.log(foo1); //报错ReferenceError cannot access uninitialized variable.
+let foo1 = '9090';
+//let命令声明变量之前，该变量都是不可用的 形成暂时性死区
+if(true){
+	console.log(typeof temp1);
+	//temp = '1';
+	//console.log(temp); //报错
+	//console.log(typeof temp); //报错
+
+	let temp;
+	console.log*(temp); //undefined
+
+	temp = '2';
+	console.log(temp); //2
+}
+
+function bar(x=y,y=2){
+	return [x,y];
+}
+bconsole.log(bar()); //报错
+
+//let不允许在相同作用域内，重复声明变量
+function fun1(){
+	let a = '0';
+	var a = '1';
+}
+
+</script>
