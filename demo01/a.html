@@ -1,0 +1,20 @@
+<html>
+<head>
+<script type="text/javascript">
+alert("refresh");
+</script>
+</head>
+<body>
+<a onclick="javascript:window.open('b.html');">OpenNewWindow</a>
+<body>
+</html>
+
+<!--
+从a页面跳转到b页面
+b页面操作完成关闭后刷新a页面
+
+实现方式
+	1.如上
+	2.使用webSocket通讯方式，服务器向客户端推送，服务器和代理都支持才行
+	3.使用ajax轮训请求获取状态，效率比较低
+-->

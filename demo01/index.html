@@ -3,8 +3,8 @@
 <meta charset="utf-8" />
 <title></title>
 </head>
-<body>
-	<p></p>
+<body onload="">
+	<p><a href="javascript:window.open('http://www.baidu.com/');">打开百度</a></p>
 
 
 </body>
@@ -52,15 +52,90 @@ if(true){
 	console.log(temp); //2
 }
 
-function bar(x=y,y=2){
-	return [x,y];
-}
-bconsole.log(bar()); //报错
+// function bar(x=y,y=2){
+// 	return [x,y];
+// }
+// console.log(bar()); //报错
 
 //let不允许在相同作用域内，重复声明变量
 function fun1(){
 	let a = '0';
-	var a = '1';
+	//var a = '1'; //报错
 }
+function fun2(){
+	let a = '1';
+	//let a = 2; //报错
+}
+
+//不能在函数内部使用let重新声明变量
+function fun3(arg){
+	//let arg; //报错
+}
+function fun4(arg){
+	{
+		let arg; //不报错
+	}
+}
+
+//全局作用域 块级作用域 函数作用域
+//let为javascript增加了块级作用域
+
+//为什么需要块级作用域 
+//(1)全局作用域时内层变量可能会覆盖外层变量
+var arr1 = new Array();
+function f_fun(){
+	console.log(arr1); //undefined
+	if(false){ 
+		var arr1 = "i am arr1";
+		console.log(arr1); //console没有输出 arr1覆盖了外层变量
+	}
+}
+f_fun();
+//(2)用来计数的循环变量会泄露成为全变量
+for(var j=0;j<5;j++){
+	console.log('j:'+j);
+}
+console.log('输出了j的值为:'+j); //5
+
+//ES6的块级作用域，外层代码块不受内层代码块内变量的影响，
+//外层作用域中无法读取内层作用域的变量
+//内层作用域可以定义与外层作用域变量同名的变量
+function f_fun2(){
+	let abc = 'abc';
+	if(true){
+		let abc = 'ABC';
+	}
+	console.log(abc); //abc
+}
+f_fun2();
+
+//es5中函数只能在顶层作用域和函数作用域中声明，不能在块级作用域中声明
+//ES6引入了块级作用域并明确规定可以在块级作用域中声明函数
+
+function myfun(){
+	console.log("this is a fun");
+}
+(function(){
+	if(false){
+		function myfun(){
+			console.log("this is a fun inside");
+		}
+	}
+	// myfun();
+}());
+
+//it is equal
+(function(){
+	function myfun(){
+		console.log("this is a fun inside");
+	}
+	if(false){
+
+	}
+	myfun();
+}());
+
+
+
 
 </script>
