@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta charset="utf-8" />
+<title>dom range</title>
+</head>
+<body onload="">
+	<!-- dom 中的范围-->
+	<p id="p1"><a href="http://www.baidu.com/">打开百度</a><span> 是他，是他，是他，就是他，我们的朋友小哪吒...</span></p>
+
+	<p id="p2"><b>周末</b>有空吗出来喝咖啡吧</p>
+
+<script>
+	//document 的createRange()方法
+	var supportRange = document.implementation.hasFeature("Range","2.0");
+	var alsoSupportsRange = (typeof document.createRange == "function");
+	console.log(supportRange);
+	console.log(alsoSupportsRange);
+	if(supportRange && alsoSupportsRange){
+		//浏览器支持range
+		//（一）用dom范围实现选择
+		var range1 = document.createRange();
+		var range2 = document.createRange();
+		var p1 = document.getElementById("p1");
+		range1.selectNode(p1);
+		range2.selectNodeContents(p1);
+		console.log(range1.startContainer);
+		console.log(range1.startOffset);
+		console.log(range1.endContainer);
+		console.log(range1.endOffset);
+
+		//（二）用dom范围实现复杂选择
+		//setStart('参照节点startContainer','偏移量值startOffset');
+		//setEnd('...','...');
+		
+		var p1index = -1;
+		var i, len;
+		for(i=0,len=p1.parentNode.childNodes.length;i<len;i++){
+			if(p1.parentNode.childNodes[i] == p1){
+				p1index = i;
+				break;
+			}
+		}
+		range1.setStart(p1.parentNode,p1index);
+		range1.setEnd(p1.parentNode,p1index + 1);
+		range2.setStart(p1,0);
+		range2.setEnd(p1,p1.childNodes.length);
+
+		var a = p1.firstChild.firstChild;
+		var b = p1.lastChild.firstChild;
+
+		console.log(a);
+		console.log(b);
+		console.log(b.length);
+
+		var range = document.createRange();
+			range.setStart(a,2);
+			range.setEnd(b,4);
+
+			console.log(range);
+
+		//（三）操作dom范围中的内容
+		//(1)删除范围所包含的内容或者移除范围选取
+		//range.deleteContents();
+		//选取范围在修改底层dom结构时能够保证格式良好，因此即使选取内容被删除了，最终的dom格式依然是良好的
+		//range.extractContents移除范围选取，但会返回范围的文档片段
+		var fragment = range.extractContents();
+		console.log(fragment);
+		p1.parentNode.appendChild(fragment);
+
+		var brdom = document.createElement('br');
+		p1.parentNode.appendChild(brdom);
+
+		//(2)克隆创建范围对象的一个副本range.cloneContents();
+		var range3 = document.createRange();
+		//console.log(p1.lastChild.firstChild.length);
+		range3.setStart(p1.firstChild.firstChild,1);
+		range3.setEnd(p1.lastChild.firstChild,p1.lastChild.firstChild.length);
+		var fragment1 = range3.cloneContents();
+		p1.parentNode.appendChild(fragment1);
+		//注意：原始的html在dom被修改之前会始终保持不变
+
+		//（四）插入dom范围中的内容 
+		//range.insertNode(dom)向range范围选取的开始位置插入html <span style="color:red">inserted span</span>
+		var spandom = document.createElement("span");
+		spandom.style.color = "red";
+		spandom.appendChild(document.createTextNode('inserted span'));
+		range3.insertNode(spandom);
+
+		//range.surroundContents(‘环绕范围内容的节点’)环绕范围插入内容
+		var p2 = document.getElementById("p2");
+			bfont = p2.firstChild;
+			console.log(bfont);
+		var range_s = document.createRange();
+			range_s.selectNode(bfont);
+
+		var span_yellow = document.createElement('span');
+			span_yellow.style.backgroundColor = "yellow";
+			range_s.surroundContents(span_yellow);//给范围选取增加了一个有黄色背景的span
+
+		//折叠dom范围
+		//range.collapse(true)折叠到起点
+		//range.collapsed;
+		//range.cloneRange();
+		//range.detach();//解除对范围的引用 让垃圾回收机制回收其内存
+		
+		range.detach();
+		range1.detach();
+		range2.detach();
+		range3.detach();
+		range_s.detach();
+
+
+	}
+
+
+
+</script>
+</body>
+</html>
