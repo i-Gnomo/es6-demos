@@ -9,6 +9,7 @@
 
 	<p id="p2"><b>周末</b>有空吗出来喝咖啡吧</p>
 
+	<p id="p3">我是一个文本</p>我是用来隔开这两个文本的<p id="p4">我是另一个文本</p>
 <script>
 	//document 的createRange()方法
 	var supportRange = document.implementation.hasFeature("Range","2.0");
@@ -90,30 +91,60 @@
 		var p2 = document.getElementById("p2");
 			bfont = p2.firstChild;
 			console.log(bfont);
-		var range_s = document.createRange();
-			range_s.selectNode(bfont);
+		var range4 = document.createRange();
+			range4.selectNode(bfont);
 
 		var span_yellow = document.createElement('span');
 			span_yellow.style.backgroundColor = "yellow";
-			range_s.surroundContents(span_yellow);//给范围选取增加了一个有黄色背景的span
+			range4.surroundContents(span_yellow);//给范围选取增加了一个有黄色背景的span
 
 		//折叠dom范围
 		//range.collapse(true)折叠到起点
 		//range.collapsed;
 		//range.cloneRange();
-		//range.detach();//解除对范围的引用 让垃圾回收机制回收其内存
+		//range.detach();//从创建范围的文档里分离出范围 解除对范围的引用 让垃圾回收机制回收其内存
 		
 		range.detach();
 		range1.detach();
 		range2.detach();
 		range3.detach();
-		range_s.detach();
+		range4.detach();
+		range4 = null;
+		console.log(range4);
 
-
+		var p3 = document.getElementById("p3");
+		var p4 = document.getElementById("p4");
+		var rangepp = document.createRange();
+		rangepp.setStartAfter(p3);
+		rangepp.setEndBefore(p4);
+		console.log(rangepp);
+		console.log(rangepp.collapsed); //输出false
+		rangepp.detach();
+		rangepp = null;
 	}
-
-
-
+	
 </script>
+
+<p id="p5"><span>Hello </span>world!</p>
+<script>
+	//比较dom范围
+	//Range.START_TO_START
+	//Range.START_TO_END
+	//Range.END_TO_END
+	//Range.END_TO_START
+	
+	var rg1 = document.createRange();
+	var rg2 = document.createRange();
+	var p5 = document.getElementById("p5");
+	rg1.selectNodeContents(p5);
+	rg2.selectNodeContents(p5);
+	rg2.setEndBefore(p5.lastChild);
+	console.log(rg1.compareBoundaryPoints(Range.END_TO_END,rg2)); //1 第一个范围的终点位于第二个范围的终点之后
+</script>
+
+
+
+
+
 </body>
 </html>
